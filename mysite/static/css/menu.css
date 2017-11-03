@@ -1,0 +1,22 @@
+#menu li {
+    display: inline;
+    padding: 10px !important;
+    background-color: #343a40;
+    margin: 25px 10px 10px 0px;
+}
+#menu a {
+    color: rgba(255,255,255,.75);
+}
+hr.vertical
+{
+   width: 5px;
+   height: 500px;
+   border-left: 1px solid #C8C8C8;/* or height in PX */
+}
+
+hr.vertical2
+{
+   width: 1px;
+   height: 250px;
+   border-left: 1px solid #C8C8C8;/* or height in PX */
+}
