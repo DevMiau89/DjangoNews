@@ -4,9 +4,11 @@ from django.contrib import admin
 from django.views.generic import RedirectView
 
 from . views import (
-    index
+    index,
+    registration
 )
 
 urlpatterns = [
     url(r'^$', index, name='news'),
+    url(r'^register/$', index, name='registration')
 ]
