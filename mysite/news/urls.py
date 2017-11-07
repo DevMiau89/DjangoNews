@@ -10,5 +10,5 @@ from . views import (
 
 urlpatterns = [
     url(r'^$', index, name='news'),
-    url(r'^register/$', index, name='registration')
+    url(r'^register/$', registration, name='registration')
 ]

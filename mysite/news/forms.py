@@ -4,6 +4,7 @@ from django import forms
 
 
 class RegistrationForm(forms.ModelForm):
+    email_ver = forms.EmailField(required=False)
     password = forms.CharField(widget=forms.PasswordInput, required=True)
 
     class Meta:
@@ -12,8 +13,9 @@ class RegistrationForm(forms.ModelForm):
 
     def clean_email(self, *args, **kwargs):
         email = self.cleaned_data.get('email')
-        email2 = self.cleaned_data.get('email_ver')
-
+        email2 = self.data.get('email_ver')
+        print email
+        print email2
         if email != email2:
             raise forms.ValidationError("Emails must match")
         email_qs = User.objects.filter(email=email).first()
