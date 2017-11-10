@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
-from .forms import RegistrationForm
+from django.shortcuts import render, redirect
+from .forms import RegistrationForm, LoadForm
 from django.contrib.auth.models import User
 from django.contrib.auth import (
     authenticate,
@@ -13,7 +13,21 @@ from django.contrib.auth import (
 
 
 def index(request):
-    return render(request, 'index.html', {})
+    if request.method == 'POST':
+        login_form = LoadForm(request.POST)
+        if login_form.is_valid():
+            form_login_email = login_form.cleaned_data["email"]
+            form_login = login_form.cleaned_data["password"]
+            print form_login_email
+            print form_login
+            user = User.objects.filter(email=form_login_email, password=form_login).first()
+
+            # auth_user = authenticate(email=user.email, password=user.password)
+            if user.is_active:
+                login(request, user)
+            return render(request, 'index.html', {"form": LoadForm()})
+
+    return render(request, 'index.html', {"form": LoadForm()})
 
 
 def registration(request):
@@ -30,3 +44,8 @@ def registration(request):
             return render(request, 'registration.html', {"register_form": register_form})
 
     return render(request, 'registration.html', {"register_form": register_form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')

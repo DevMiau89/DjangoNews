@@ -1,5 +1,8 @@
 from django.contrib.auth.models import User
 from django import forms
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, ButtonHolder
+from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, InlineField
+from crispy_forms.helper import FormHelper
 # from .models import Registration
 
 
@@ -22,3 +25,29 @@ class RegistrationForm(forms.ModelForm):
         if email_qs:
             raise forms.ValidationError("This email has already been registered")
         return email
+
+
+class LoadForm(forms.Form):
+    email = forms.EmailField(required=True)
+    password = forms.CharField(widget=forms.PasswordInput, required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(LoadForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-inline'
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.form_action = '/'
+        self.helper.layout = Layout(
+            InlineField(
+                'email'
+            ),
+            InlineField(
+                'password'
+
+            ),
+            InlineField(
+                Submit('sign in', 'Sign in', css_class='btn-submit')
+            ),
+        )
+

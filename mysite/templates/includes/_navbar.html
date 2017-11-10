@@ -1,11 +1,13 @@
- <!-- Navigation -->
+{% load crispy_forms_tags %}
+<!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container">
+    <div class="row col-md-12">
     <a class="navbar-brand" href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
+    <div class="collapse navbar-collapse" id="navbarResponsive" >
       <ul class="navbar-nav ml-auto">
         <li class="nav-item active">
           <a class="nav-link" href="#"><i class="fa fa-newspaper-o" aria-hidden="true"></i>
@@ -17,15 +19,33 @@
           <a class="nav-link" href="#"><i class="fa fa-search" aria-hidden="true" style="color:white"></i>
           Search</a>
         </li>
+
+        {% if user.email %}
+        <li class="nav-item">
+         <span style="color:wheat"><a class="nav-link"href="#"><i class="fa fa-user" aria-hidden="true" style="color:white"></i>
+          {{ user.email }}</a></span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout"><i class="fa fa-sign-out" aria-hidden="true" style="color:white"></i>
+          Logout</a>
+        </li>
+        {% else %}
         <li class="nav-item">
           <a class="nav-link" href="/register"><i class="fa fa-user-plus" aria-hidden="true" style="color:white"></i>
           Sign up</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="fa fa-sign-in" aria-hidden="true" style="color:white"></i>
-          Sign in</a>
-        </li>
+        <span><a class="nav-link" id="sign_in" href="#"><i class="fa fa-sign-in" aria-hidden="true" style="color:white"></i>
+          Sign in</a></span>
+         </li>
+        {% endif %}
+
       </ul>
     </div>
+      <div class="row col-md-12" id="div_hidden" style="margin-left: 30px; margin-right: 0px; display: none">
+        <div style="margin-left: 50%;">{% crispy form %}</div>
+      </div>
+    </div>
+
   </div>
 </nav>
