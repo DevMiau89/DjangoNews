@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
-from .forms import RegistrationForm, LoadForm
+from .forms import RegistrationForm, LoadForm, AddArticleForm
 from django.contrib.auth.models import User
 from django.contrib.auth import (
     authenticate,
@@ -49,3 +49,9 @@ def registration(request):
 def logout_view(request):
     logout(request)
     return redirect('/')
+
+
+def add_article(request):
+    add_article_form = AddArticleForm()
+
+    return render(request, 'add_article', {"add_article_form": AddArticleForm()})
