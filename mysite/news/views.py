@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegistrationForm, LoadForm, AddArticleForm
-from .models import Article
+from .forms import RegistrationForm, LoadForm, AddArticleForm, CommentForm
+from .models import Article, Comment
 from django.contrib.auth.models import User
 from django.contrib.auth import (
     authenticate,
@@ -68,4 +68,24 @@ def add_article(request):
 
 def article_detail(request, id=None):
     instance = get_object_or_404(Article, id=id)
-    return render(request, 'article_detail.html', {"form": LoadForm(), "instance": instance})
+    comments = instance.comments.filter(active=True)
+    comment_form = CommentForm()
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.instance = instance
+            new_comment.save()
+        else:
+            comment_form = CommentForm()
+        return render(request, 'article_detail.html', {"form": LoadForm(),
+                                                       "instance": instance,
+                                                       'comments': comments,
+                                                       'comment_form': comment_form
+                                                       })
+
+    return render(request, 'article_detail.html', {"form": LoadForm(),
+                                                   "instance": instance,
+                                                   'comments': comments,
+                                                   'comment_form': comment_form
+                                                   })

@@ -3,7 +3,7 @@ from django import forms
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, ButtonHolder
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, InlineField
 from crispy_forms.helper import FormHelper
-from .models import Article
+from .models import Article, Comment
 
 
 class RegistrationForm(forms.ModelForm):
@@ -71,3 +71,9 @@ class AddArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = '__all__'
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['name', 'email', 'body']
