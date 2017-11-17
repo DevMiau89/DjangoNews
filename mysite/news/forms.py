@@ -56,8 +56,18 @@ class AddArticleForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AddArticleForm, self).__init__(*args, **kwargs)
 
-
-
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_action = '#'
+        self.helper.layout = Layout(
+            'title',
+            'text',
+            'image',
+            'author',
+            'tags'
+        )
+        self.helper.add_input(Submit('submit', 'Submit'))
 
     class Meta:
         model = Article
+        fields = '__all__'

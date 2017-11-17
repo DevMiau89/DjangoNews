@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegistrationForm, LoadForm, AddArticleForm
+from .models import Article
 from django.contrib.auth.models import User
 from django.contrib.auth import (
     authenticate,
@@ -13,6 +14,7 @@ from django.contrib.auth import (
 
 
 def index(request):
+    top_articles = Article.objects.all().order_by("-created_date")[:5]
     if request.method == 'POST':
         login_form = LoadForm(request.POST)
         if login_form.is_valid():
@@ -25,13 +27,13 @@ def index(request):
             # auth_user = authenticate(email=user.email, password=user.password)
             if user.is_active:
                 login(request, user)
-            return render(request, 'index.html', {"form": LoadForm()})
+            return render(request, 'article_detail.html', {"form": LoadForm()})
 
-    return render(request, 'index.html', {"form": LoadForm()})
+    return render(request, 'index.html', {"form": LoadForm(), "top_articles": top_articles})
 
 
 def registration(request):
-    register_form = RegistrationForm()
+    # register_form = RegistrationForm()
     if request.method == 'POST':
         register_form = RegistrationForm(request.POST)
         if register_form.is_valid():
@@ -43,7 +45,7 @@ def registration(request):
             feedback.save()
             return render(request, 'registration.html', {"register_form": register_form})
 
-    return render(request, 'registration.html', {"register_form": register_form})
+    return render(request, 'registration.html', {"register_form": RegistrationForm(), "form": LoadForm()})
 
 
 def logout_view(request):
@@ -52,6 +54,18 @@ def logout_view(request):
 
 
 def add_article(request):
-    add_article_form = AddArticleForm()
+    # add_article_form = AddArticleForm()
+    if request.method == 'POST':
+        add_article_form = AddArticleForm(request.POST, request.FILES)
+        print add_article_form
 
-    return render(request, 'add_article', {"add_article_form": AddArticleForm()})
+        if add_article_form.is_valid():
+            add_article_form.save()
+            return render(request, 'add_article.html', {"add_article_form": AddArticleForm(), "form": LoadForm()})
+
+    return render(request, 'add_article.html', {"add_article_form": AddArticleForm(), "form": LoadForm()})
+
+
+def article_detail(request, id=None):
+    instance = get_object_or_404(Article, id=id)
+    return render(request, 'article_detail.html', {"form": LoadForm(), "instance": instance})

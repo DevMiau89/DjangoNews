@@ -1,0 +1,27 @@
+{% extends "includes/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+      <br>
+      <div class="row">
+        <div class="col-sm-12" style="border-right: 1px solid #C8C8C8">
+        </div>
+      </div>
+</div>
+<div class="container">
+    <br>
+    <div class="row">
+
+        <div class="col-sm-8" style="margin-left: 1%;">
+            <h3><center>Add Article</center></h3><br>
+        {% crispy add_article_form %}
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+<br>
+</div>
+    <!-- /.container -->
+{% endblock %}

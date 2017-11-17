@@ -19,6 +19,10 @@
           <a class="nav-link" href="#"><i class="fa fa-search" aria-hidden="true" style="color:white"></i>
           Search</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_article"><i class="fa fa-plus" aria-hidden="true" style="color:white"></i>
+          Add Article</a>
+        </li>
 
         {% if user.email %}
         <li class="nav-item">
@@ -49,3 +53,15 @@
 
   </div>
 </nav>
+ <!-- Header with Background Image -->
+<header  style="height:190px; background-color: #A9A9A9">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="display-3 text-center text-white mt-4" style="margin-left: 635px;">The PurrNews</h1>
+          <br>
+          {% include "includes/_navbar2.html" %}
+      </div>
+    </div>
+  </div>
+</header>
