@@ -20,7 +20,7 @@ class Article(models.Model):
 
 
 class Comment(models.Model):
-    article = models.ForeignKey(Article, related_name='comments')
+    article = models.ForeignKey(Article, related_name='comments', blank=True, null=True)
     name = models.CharField(max_length=80)
     email = models.EmailField()
     body = models.TextField()

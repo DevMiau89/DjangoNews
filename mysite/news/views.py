@@ -74,8 +74,9 @@ def article_detail(request, id=None):
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
-            new_comment.instance = instance
+            new_comment.article_id = instance.id
             new_comment.save()
+
         else:
             comment_form = CommentForm()
         return render(request, 'article_detail.html', {"form": LoadForm(),
@@ -89,3 +90,7 @@ def article_detail(request, id=None):
                                                    'comments': comments,
                                                    'comment_form': comment_form
                                                    })
+
+
+def contact(request):
+    return render(request, 'contact.html', {"form": LoadForm()})

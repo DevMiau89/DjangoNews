@@ -3,54 +3,63 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
 <!-- Page Content -->
     <div class="container" style="padding-bottom: 20%;">
-
       <div class="row">
-
         <!-- Post Content Column -->
         <div class="col-lg-10">
-
           <!-- Title -->
           <h1 class="mt-4">{{instance.title}}</h1>
-
           <!-- Author -->
           <p class="lead">
             by
             <a href="#">{{ instance.author }}</a>
           </p>
-
           <hr>
-
           <!-- Date/Time -->
           <p>Posted on {{ instance.created_date }}</p>
-
-          <hr>
-
           <!-- Preview Image -->
            {% if instance.image %}
           <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="">
           {% endif %}
           <hr>
-
           <!-- Post Content -->
           {{ instance.text }}
-          <!--<blockquote class="blockquote">-->
-            <!--<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>-->
-            <!--<footer class="blockquote-footer">Someone famous in-->
-              <!--<cite title="Source Title">Source Title</cite>-->
-            <!--</footer>-->
-          <!--</blockquote>-->
-
+          <!--Total number of comments-->
+          {% with comments.count as total_comments %}
+          <span>
+            {{ total_comments }} comment{{ total_comments| pluralize }}
+          </span>
+          {% endwith %}
           <hr>
-        <div class="fb-comments" data-href="{{request.build_absolute_uri}}" data-width="100%" data-numposts="5"></div>
+          <!--Display of all comments-->
+          {% for comment in comments %}
+            <div class="comment">
+              <p class="info">
+                comment {{ forloop.counter }} by {{ comment.name }}
+                {{ comment.created }}
+                {{ comment.body }}
+              </p>
+              {% empty %}
+              <p>There are no comments yet</p>
+            </div>
+          {% endfor %}
+          <hr>
+          <!--Comment Form-->
+          {% if new_comment %}
+          <span>Your comment has been added</span>
+          {% else %}
+          <form action="." method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Add comment"></p>
+          </form>
+          {% endif %}
         </div>
+      </div>
 
       </div>
       <!-- /.row -->
-
     </div>
     <!-- /.container -->
-
 {% endblock content %}
