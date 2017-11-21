@@ -2,8 +2,12 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegistrationForm, LoadForm, AddArticleForm, CommentForm
+from taggit.models import Tag
+from django.contrib import messages
+from django.core.mail import send_mail
+from .forms import RegistrationForm, LoadForm, AddArticleForm, CommentForm, ContactForm
 from .models import Article, Comment
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import (
     authenticate,
@@ -13,8 +17,17 @@ from django.contrib.auth import (
 # Create your views here.
 
 
-def index(request):
+def index(request, tag_slug=None):
     top_articles = Article.objects.all().order_by("-created_date")[:5]
+    all_articles = Article.objects.all().order_by("-created_date")
+
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        article_list = all_articles.filter(tags__in=[tag])
+        return render(request, 'index.html',
+                      {"form": LoadForm(), "top_articles": top_articles, "all_articles": article_list, "tag": tag})
+
     if request.method == 'POST':
         login_form = LoadForm(request.POST)
         if login_form.is_valid():
@@ -28,8 +41,9 @@ def index(request):
             if user.is_active:
                 login(request, user)
             return render(request, 'article_detail.html', {"form": LoadForm()})
-
-    return render(request, 'index.html', {"form": LoadForm(), "top_articles": top_articles})
+        else:
+            messages.warning(request, 'Please correct the error below.')
+    return render(request, 'index.html', {"form": LoadForm(), "top_articles": top_articles, "all_articles": all_articles, "tag": tag})
 
 
 def registration(request):
@@ -93,4 +107,24 @@ def article_detail(request, id=None):
 
 
 def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            # email send
+            subject = "Site contact form"
+            from_email = settings.EMAIL_HOST_USER
+            to_email = [from_email, "lizinczyk.karolina@gmail.com"]
+            contact_message = """
+                        Message from : {0}
+                        Message content: {1}
+                        Email : {2}
+                        Phone : {3}
+                        """.format(cd["name"], cd["email"], cd["phone"], cd["message"])
+
+            send_mail(subject, contact_message, from_email, to_email, fail_silently=False)
+
+            messages.success(request, "Thank you for the message. We will get back to you shortly.")
+
+            return render(request, "contact.html", {"form": form})
     return render(request, 'contact.html', {"form": LoadForm()})

@@ -4,39 +4,39 @@
 <div class="container" style="padding-bottom: 13%;">
       <div class="row">
           <div class="col-sm-10">
-<div><h3><center>
-      {% include "includes/messages_display.html" %}
-        </center></h3></div>
-      <!-- /.messages -->
-      <div class="bg-faded p-4 my-4">
-        <hr class="divider">
-        <h3 class="text-center text-lg text-uppercase my-0">Contact Form</h3>
-        <hr class="divider">
-        <form name="form" method="POST" action="">{% csrf_token %}
-          <div class="row">
-            <div class="form-group col-lg-4">
-              <label for="name" class="text-heading">Name</label>
-              <input type="text" name="name" id="name" class="form-control">
-            </div>
-            <div class="form-group col-lg-4">
-              <label for="email" class="text-heading">Email Address</label>
-              <input type="email" name="email" id="email" class="form-control">
-            </div>
-            <div class="form-group col-lg-4">
-              <label for="phone" class="text-heading">Phone Number</label>
-              <input type="tel" name="phone" id="phone" class="form-control">
-            </div>
-            <div class="clearfix"></div>
-            <div class="form-group col-lg-12">
-              <label for="message" class="text-heading">Message</label>
-              <textarea type="text" class="form-control" name="message" id="message" rows="6"></textarea>
-            </div>
-            <div class="form-group col-lg-12">
-              <button type="submit" class="btn btn-secondary ">Submit</button>
-            </div>
-          </div>
-        </form>
-      </div>
+            <div style="margin-top: 45px; "><h4><center>
+            {% include "includes/messages_display.html" %}
+            </center></h4></div>
+              <!-- /.messages -->
+              <div class="bg-faded p-4 my-4">
+                <hr class="divider">
+                <h3 class="text-center text-lg text-uppercase my-0">Contact Form</h3>
+                <hr class="divider">
+                <form name="form" method="POST" action="">{% csrf_token %}
+                  <div class="row">
+                    <div class="form-group col-lg-4">
+                      <label for="name" class="text-heading">Name</label>
+                      <input type="text" name="name" id="name" class="form-control">
+                    </div>
+                    <div class="form-group col-lg-4">
+                      <label for="email" class="text-heading">Email Address</label>
+                      <input type="email" name="email" id="email" class="form-control">
+                    </div>
+                    <div class="form-group col-lg-4">
+                      <label for="phone" class="text-heading">Phone Number</label>
+                      <input type="tel" name="phone" id="phone" class="form-control">
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="form-group col-lg-12">
+                      <label for="message" class="text-heading">Message</label>
+                      <textarea type="text" class="form-control" name="message" id="message" rows="6"></textarea>
+                    </div>
+                    <div class="form-group col-lg-12">
+                      <button type="submit" class="btn btn-secondary ">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
           </div>
       </div>
 </div>

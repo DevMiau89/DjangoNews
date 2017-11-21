@@ -24,9 +24,10 @@
           {% endif %}
           <hr>
           <!-- Post Content -->
-          {{ instance.text }}
+          <p>{{ instance.text }}</p>
+
           <!--Total number of comments-->
-          {% with comments.count as total_comments %}
+          <span>{% with comments.count as total_comments %} </span>
           <span>
             {{ total_comments }} comment{{ total_comments| pluralize }}
           </span>
