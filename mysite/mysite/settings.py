@@ -27,7 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+# Email Configuration
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'lizinczyk.karolina@gmail.com'
+EMAIL_HOST_PASSWORD = 'Dziubasek1'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 # Application definition
 
 INSTALLED_APPS = [
