@@ -9,6 +9,7 @@ from .forms import RegistrationForm, LoadForm, AddArticleForm, CommentForm, Cont
 from .models import Article, Comment
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import (
     authenticate,
     login,
@@ -21,12 +22,26 @@ def index(request, tag_slug=None):
     top_articles = Article.objects.all().order_by("-created_date")[:5]
     all_articles = Article.objects.all().order_by("-created_date")
 
+    paginator = Paginator(all_articles, 3)
+    page_request_var = 'page'
+    page = request.GET.get(page_request_var)
+
+    try:
+        queryset = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        queryset = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        queryset = paginator.page(paginator.num_pages)
+
     tag = None
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         article_list = all_articles.filter(tags__in=[tag])
         return render(request, 'index.html',
-                      {"form": LoadForm(), "top_articles": top_articles, "all_articles": article_list, "tag": tag})
+                      {"form": LoadForm(), "top_articles": top_articles, "all_articles": article_list,
+                       "tag": tag, "page_request_var": page_request_var, "pag_queryset": queryset})
 
     if request.method == 'POST':
         login_form = LoadForm(request.POST)
@@ -43,7 +58,9 @@ def index(request, tag_slug=None):
             return render(request, 'article_detail.html', {"form": LoadForm()})
         else:
             messages.warning(request, 'Please correct the error below.')
-    return render(request, 'index.html', {"form": LoadForm(), "top_articles": top_articles, "all_articles": all_articles, "tag": tag})
+    return render(request, 'index.html', {"form": LoadForm(), "top_articles": top_articles,
+                                          "all_articles": all_articles, "tag": tag, "page_request_var": page_request_var,
+                                          "pag_queryset": queryset})
 
 
 def registration(request):
