@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from taggit.models import Tag
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.db.models import Count
 from .forms import RegistrationForm, LoadForm, AddArticleForm, CommentForm, ContactForm
 from .models import Article, Comment
 from django.conf import settings
@@ -101,6 +102,12 @@ def article_detail(request, id=None):
     instance = get_object_or_404(Article, id=id)
     comments = instance.comments.filter(active=True)
     comment_form = CommentForm()
+
+    article_tags_ids = instance.tags.values_list('id', flat=True)
+    print article_tags_ids
+    similar_articles = Article.objects.filter(tags__in=article_tags_ids).exclude(id=instance.id)
+    similar_articles = similar_articles.annotate(same_tags=Count('tags')).order_by('-same_tags', '-created_date')[:4]
+    print similar_articles
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -113,13 +120,15 @@ def article_detail(request, id=None):
         return render(request, 'article_detail.html', {"form": LoadForm(),
                                                        "instance": instance,
                                                        'comments': comments,
-                                                       'comment_form': comment_form
+                                                       'comment_form': comment_form,
+                                                       'similar_articles': similar_articles
                                                        })
 
     return render(request, 'article_detail.html', {"form": LoadForm(),
                                                    "instance": instance,
                                                    'comments': comments,
-                                                   'comment_form': comment_form
+                                                   'comment_form': comment_form,
+                                                   'similar_articles': similar_articles
                                                    })
 
 

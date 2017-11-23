@@ -7,7 +7,7 @@
     <div class="container" style="padding-bottom: 20%;">
       <div class="row">
         <!-- Post Content Column -->
-        <div class="col-lg-10">
+        <div class="col-lg-9">
           <!-- Title -->
           <h1 class="mt-4">{{instance.title}}</h1>
           <!-- Author -->
@@ -25,7 +25,25 @@
           <hr>
           <!-- Post Content -->
           <p>{{ instance.text }}</p>
-
+        </div>
+         <!--Similar articles-->
+          <div class="col-lg-3" style="margin-top: 10px;"><center>
+          <h4>Similar articles</h4>
+          {% for article in similar_articles %}
+          <p>
+          <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+          </p>
+          {% empty %}
+          There are no articles yet.
+          {% endfor %}
+          </center>
+        </div>
+        <div class="row">
+        </div>
+      </div>
+      <!-- /.row -->
+      <div class="row">
+          <div class="col-lg-8">
           <!--Total number of comments-->
           <span>{% with comments.count as total_comments %} </span>
           <span>
@@ -47,6 +65,7 @@
           {% endfor %}
           <hr>
           <!--Comment Form-->
+
           {% if new_comment %}
           <span>Your comment has been added</span>
           {% else %}
@@ -56,11 +75,8 @@
             <p><input type="submit" value="Add comment"></p>
           </form>
           {% endif %}
-        </div>
+          </div>
       </div>
-
-      </div>
-      <!-- /.row -->
     </div>
     <!-- /.container -->
 {% endblock content %}
