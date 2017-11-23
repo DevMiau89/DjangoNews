@@ -22,7 +22,7 @@ def index(request, tag_slug=None):
     top_articles = Article.objects.all().order_by("-created_date")[:5]
     all_articles = Article.objects.all().order_by("-created_date")
 
-    paginator = Paginator(all_articles, 3)
+    paginator = Paginator(all_articles, 5)
     page_request_var = 'page'
     page = request.GET.get(page_request_var)
 
@@ -59,7 +59,7 @@ def index(request, tag_slug=None):
         else:
             messages.warning(request, 'Please correct the error below.')
     return render(request, 'index.html', {"form": LoadForm(), "top_articles": top_articles,
-                                          "all_articles": all_articles, "tag": tag, "page_request_var": page_request_var,
+                                          "tag": tag, "page_request_var": page_request_var,
                                           "pag_queryset": queryset})
 
 
