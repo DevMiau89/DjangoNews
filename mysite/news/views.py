@@ -41,7 +41,6 @@ def index(request, tag_slug=None):
         # If page is out of range (e.g. 9999), deliver last page of results.
         queryset = paginator.page(paginator.num_pages)
 
-
     if request.method == 'POST':
         login_form = LoadForm(request.POST)
         if login_form.is_valid():
