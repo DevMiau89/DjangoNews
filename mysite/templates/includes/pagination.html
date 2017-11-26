@@ -1,0 +1,12 @@
+<ul class="pagination justify-content-center mb-4">
+    <li class="page-item">
+    {% if pag_queryset.has_previous %}
+        <a class="page-link" href="?{{ page_request_var }}={{ pag_queryset.previous_page_number }}">&larr; Newer</a>
+    {% endif %}
+    </li>
+    <li class="page-item">
+    {% if pag_queryset.has_next %}
+        <a class="page-link" href="?{{ page_request_var }}={{ pag_queryset.next_page_number }}">Older &rarr;</a>
+    {% endif %}
+    </li>
+</ul>

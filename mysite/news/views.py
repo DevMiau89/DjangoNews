@@ -23,6 +23,11 @@ def index(request, tag_slug=None):
     top_articles = Article.objects.all().order_by("-created_date")[:5]
     all_articles = Article.objects.all().order_by("-created_date")
 
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        all_articles = all_articles.filter(tags__in=[tag])
+
     paginator = Paginator(all_articles, 5)
     page_request_var = 'page'
     page = request.GET.get(page_request_var)
@@ -36,13 +41,6 @@ def index(request, tag_slug=None):
         # If page is out of range (e.g. 9999), deliver last page of results.
         queryset = paginator.page(paginator.num_pages)
 
-    tag = None
-    if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
-        article_list = all_articles.filter(tags__in=[tag])
-        return render(request, 'index.html',
-                      {"form": LoadForm(), "top_articles": top_articles, "all_articles": article_list,
-                       "tag": tag, "page_request_var": page_request_var, "pag_queryset": queryset})
 
     if request.method == 'POST':
         login_form = LoadForm(request.POST)
